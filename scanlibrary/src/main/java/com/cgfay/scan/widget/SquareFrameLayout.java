@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
  * 方形布局
  */
 public class SquareFrameLayout extends FrameLayout {
-
     public SquareFrameLayout(Context context) {
         super(context);
     }

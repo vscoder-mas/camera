@@ -20,17 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaPreviewActivity extends AppCompatActivity
-        implements ViewPager.OnPageChangeListener, MediaScanner.MediaScanCallbacks {
-
+        implements ViewPager.OnPageChangeListener, MediaScanner.MediaScanCallbackListener {
     public static final String CURRENT_ALBUM = "current_album";
     public static final String CURRENT_MEDIA = "current_media";
-
     public static final String CURRENT_POSITION = "current_position";
 
     private ViewPager mPager;
     private PreviewPagerAdapter mAdapter;
     private MediaScanner mMediaScanner;
-
     // 当前索引
     private int mCurrentPosition = -1;
 
@@ -42,7 +39,8 @@ public class MediaPreviewActivity extends AppCompatActivity
         mPager.addOnPageChangeListener(this);
         mAdapter = new PreviewPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
-        mMediaScanner = new MediaScanner(this, this);
+        mMediaScanner = new MediaScanner(this);
+        mMediaScanner.setCallbackListener(this);
         AlbumItem album = getIntent().getParcelableExtra(CURRENT_ALBUM);
         mMediaScanner.scanAlbum(album);
 
@@ -106,9 +104,11 @@ public class MediaPreviewActivity extends AppCompatActivity
         while (cursor.moveToNext()) {
             items.add(MediaItem.valueOf(cursor));
         }
+
         if (items.isEmpty()) {
             return;
         }
+
         PreviewPagerAdapter adapter = (PreviewPagerAdapter) mPager.getAdapter();
         adapter.addMediaItems(items);
         adapter.notifyDataSetChanged();

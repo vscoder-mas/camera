@@ -3,8 +3,6 @@ package com.cgfay.scan.scanner;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -17,25 +15,25 @@ import java.lang.ref.WeakReference;
  * 相册媒体扫描器
  */
 public class MediaScanner implements LoaderManager.LoaderCallbacks<Cursor> {
-
     private static final int LOADER_ID = 2;
     private static final String ALBUM_ARGS = "album_args";
     private static final String CAPTURE_ENABLE_ARGS = "capture_enable_args";
 
     private WeakReference<Context> mWeakContext;
     private LoaderManager mLoaderManager;
-    private MediaScanCallbacks mCallbacks;
+    private MediaScanCallbackListener callbackListener;
 
-
-    public MediaScanner(FragmentActivity activity, MediaScanCallbacks callbacks) {
+    public MediaScanner(FragmentActivity activity) {
         mWeakContext = new WeakReference<Context>(activity);
         mLoaderManager = activity.getSupportLoaderManager();
-        mCallbacks = callbacks;
     }
 
-    @NonNull
+    public void setCallbackListener(MediaScanCallbackListener callbackListener) {
+        this.callbackListener = callbackListener;
+    }
+
     @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Context context = mWeakContext.get();
         if (context == null) {
             return null;
@@ -48,20 +46,20 @@ public class MediaScanner implements LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Context context = mWeakContext.get();
         if (context == null) {
             return;
         }
-        if (mCallbacks != null) {
-            mCallbacks.onMediaScanFinish(data);
+        if (callbackListener != null) {
+            callbackListener.onMediaScanFinish(data);
         }
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        if (mCallbacks != null) {
-            mCallbacks.onMediaScanReset();
+    public void onLoaderReset(Loader<Cursor> loader) {
+        if (callbackListener != null) {
+            callbackListener.onMediaScanReset();
         }
     }
 
@@ -69,23 +67,25 @@ public class MediaScanner implements LoaderManager.LoaderCallbacks<Cursor> {
         if (mLoaderManager != null) {
             mLoaderManager.destroyLoader(LOADER_ID);
         }
-        mCallbacks = null;
+        callbackListener = null;
     }
 
     /**
      * 扫描目标相册
-     * @param target    目标相册
+     *
+     * @param target 目标相册
      */
-    public void scanAlbum(@Nullable AlbumItem target) {
+    public void scanAlbum(AlbumItem target) {
         scanAlbum(target, false);
     }
 
     /**
      * 扫描目标相册
+     *
      * @param target        目标相册
      * @param enableCapture 是否允许拍照项
      */
-    public void scanAlbum(@Nullable AlbumItem target, boolean enableCapture) {
+    public void scanAlbum(AlbumItem target, boolean enableCapture) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(ALBUM_ARGS, target);
         bundle.putBoolean(CAPTURE_ENABLE_ARGS, enableCapture);
@@ -94,10 +94,11 @@ public class MediaScanner implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * 重新扫描相册
+     *
      * @param target
      * @param enableCapture
      */
-    public void reScanAlbum(@Nullable AlbumItem target, boolean enableCapture) {
+    public void reScanAlbum(AlbumItem target, boolean enableCapture) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(ALBUM_ARGS, target);
         bundle.putBoolean(CAPTURE_ENABLE_ARGS, enableCapture);
@@ -107,8 +108,7 @@ public class MediaScanner implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * 媒体扫描回调
      */
-    public interface MediaScanCallbacks {
-
+    public interface MediaScanCallbackListener {
         void onMediaScanFinish(Cursor cursor);
 
         void onMediaScanReset();

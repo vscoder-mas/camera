@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.cgfay.scan.R;
+import com.cgfay.scan.engine.MediaScanParam;
 import com.cgfay.scan.model.AlbumItem;
 import com.cgfay.scan.model.MediaItem;
-import com.cgfay.scan.engine.MediaScanParam;
 import com.cgfay.scan.widget.MediaItemLayout;
 
 /**
@@ -22,10 +22,8 @@ import com.cgfay.scan.widget.MediaItemLayout;
  */
 public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHolder>
         implements MediaItemLayout.OnMediaItemClickListener {
-
     private static final int TYPE_CAPTURE = 0x01;
     private static final int TYPE_MEDIA = 0x02;
-
     // 扫描参数
     private MediaScanParam mMediaScanParam;
     // 占位图
@@ -64,6 +62,7 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_media_view, parent, false);
             return new ThumbnailViewHolder(view);
         }
+
         return null;
     }
 
@@ -79,7 +78,6 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
                     mPlaceholder, holder));
             viewHolder.mMediaItemLayout.setMediaItem(item);
             viewHolder.mMediaItemLayout.addOnMediaItemClickListener(this);
-
         }
     }
 
@@ -103,6 +101,7 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
 
     /**
      * 获取缩略图的大小
+     *
      * @param context
      * @return
      */
@@ -116,11 +115,13 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
             mThumbnailResize = availableWidth / spanCount;
             mThumbnailResize = (int) (mThumbnailResize * mMediaScanParam.thumbnailScale);
         }
+
         return mThumbnailResize;
     }
 
     /**
      * 添加相机选中回调
+     *
      * @param cameraCapture
      */
     public void addCaptureClickListener(OnCaptureClickListener cameraCapture) {
@@ -136,6 +137,7 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
 
     /**
      * 添加媒体选中监听器
+     *
      * @param listener
      */
     public void addOnMediaSelectedListener(OnMediaItemSelectedListener listener) {
@@ -157,7 +159,6 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
      * 拍照ViewHolder
      */
     class CaptureViewHolder extends RecyclerView.ViewHolder {
-
         private ImageView capture;
 
         public CaptureViewHolder(View itemView) {
@@ -171,8 +172,8 @@ public class MediaScanAdapter extends RecyclerCursorAdapter<RecyclerView.ViewHol
      * 缩略图ViewHolder
      */
     class ThumbnailViewHolder extends RecyclerView.ViewHolder {
-
         private MediaItemLayout mMediaItemLayout;
+
         public ThumbnailViewHolder(View itemView) {
             super(itemView);
             mMediaItemLayout = (MediaItemLayout) itemView;

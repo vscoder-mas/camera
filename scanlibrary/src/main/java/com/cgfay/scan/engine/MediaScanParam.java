@@ -12,9 +12,7 @@ import java.util.Set;
  * 媒体扫描参数
  */
 public final class MediaScanParam {
-
     private static final MediaScanParam mInstance = new MediaScanParam();
-
     // 是否允许长按
     public boolean longClickEnable;
     // 是否允许多选

@@ -2,24 +2,19 @@ package com.cgfay.caincamera;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 
-import com.cgfay.caincamera.model.PxModel;
 import com.cgfay.caincamera.model.PxsModel;
 import com.cgfay.cameralibrary.engine.PreviewEngine;
 import com.cgfay.cameralibrary.engine.model.AspectRatio;
 import com.cgfay.cameralibrary.engine.model.GalleryType;
 import com.cgfay.cameralibrary.listener.OnGallerySelectedListener;
 import com.cgfay.cameralibrary.listener.OnPreviewCaptureListener;
-
 import com.cgfay.filterlibrary.glfilter.resource.FilterHelper;
 import com.cgfay.filterlibrary.glfilter.resource.MakeupHelper;
 import com.cgfay.filterlibrary.glfilter.resource.ResourceHelper;
@@ -34,11 +29,12 @@ import com.cgfay.video.activity.VideoCutActivity;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,PxControl {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 0;
 
     private PxsModel pxs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.RECORD_AUDIO);
         if (!cameraEnable || !storageWriteEnable || !recordAudio) {
             ActivityCompat.requestPermissions(this,
-                    new String[] {
+                    new String[]{
                             Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.RECORD_AUDIO
@@ -75,20 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        /*=====start====*/
-        initPx();
-        /*======end=====*/
     }
 
     @Override
     public void onClick(View v) {
-        /*=====start====*/
-        if (preOnClick(v) == true) {
-            return;
-        }
-        initPx();
-        /*======end=====*/
-
         switch (v.getId()) {
             case R.id.btn_camera: {
                 previewCamera();
@@ -96,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             case R.id.btn_edit_video: {
-                scanMedia(false, false,true);
+                scanMedia(false, false, true);
                 break;
             }
 
@@ -161,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 扫描媒体库
+     *
      * @param enableGif
      * @param enableImage
      * @param enableVideo
@@ -200,76 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-
-        /*=====start====*/
-        if (preOnBackPressed() == true) {
-            return;
-        }
-        initPx();
-        /*======end=====*/
-
         super.onBackPressed();
     }
-
-    /*=====start====*/
-    @Override
-    public void initPx() {
-        pxs = PxApplication.getInstance().getPxs();
-    }
-
-    //弹出px
-    @Override
-    public boolean preOnClick(View v)
-    {
-        if(pxs.getGenable()==0) {
-            return false;
-        }
-
-        switch (v.getId()) {
-            case R.id.btn_camera: {
-
-                for (PxModel model:pxs.getPxs()) {
-                    if (model.getEnable() == 0 || !model.getTargetId().equals("1001")) {
-                        continue;
-                    }
-                    if (model.getStart() == 1) {
-                        PxApplication app = PxApplication.getInstance();
-                        app.showFragment(MainActivity.this, model);
-                        return true;
-                    }
-                }
-                break;
-            }
-
-
-        }
-        return false;
-
-    }
-
-    @Override
-    public void closePx(Fragment fragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.remove(fragment);
-        ft.commit();
-    }
-
-    @Override
-    public boolean preOnBackPressed() {
-
-        if(pxs.getGenable()==0) {
-            return false;
-        }
-        for (PxModel model:pxs.getPxs()) {
-            if (model.getEnable() == 0 || !model.getTargetId().equals("9999")) {
-                continue;
-            }
-            PxApplication app = PxApplication.getInstance();
-            app.showFragment(MainActivity.this, model);
-            return true;
-        }
-        return false;
-    }
-    /*======end=====*/
-
 }

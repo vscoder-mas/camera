@@ -3,24 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
+
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
-        
+            android:visibility="gone" />
+
         <VideoView
             android:id="@+id/video_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 
     <ImageView
@@ -29,6 +29,7 @@
         android:layout_height="@dimen/preview_play_icon_size"
         android:layout_gravity="center"
         android:background="@drawable/ic_media_video_indicator"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </FrameLayout>
+

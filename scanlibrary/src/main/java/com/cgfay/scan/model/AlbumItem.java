@@ -13,7 +13,6 @@ import com.cgfay.scan.scanner.AlbumCursorLoader;
  * 相册item对象
  */
 public class AlbumItem implements Parcelable {
-
     public static final Creator<AlbumItem> CREATOR = new Creator<AlbumItem>() {
         @Override
         public AlbumItem createFromParcel(Parcel source) {

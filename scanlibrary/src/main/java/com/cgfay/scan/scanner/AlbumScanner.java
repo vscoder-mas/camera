@@ -13,18 +13,20 @@ import java.lang.ref.WeakReference;
  * 相册扫描器
  */
 public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
-
     private static final int LOADER_ID = 1;
     private WeakReference<Context> mWeakContext;
     private LoaderManager mLoaderManager;
     private int mCurrentSelection;
     private boolean mLoadFinished;
-    private AlbumScanCallbacks mCallbacks;
+    private AlbumScanCallbackListener callbackListener;
 
-    public AlbumScanner(FragmentActivity activity, AlbumScanCallbacks callbacks) {
+    public AlbumScanner(FragmentActivity activity) {
         mWeakContext = new WeakReference<Context>(activity);
         mLoaderManager = activity.getSupportLoaderManager();
-        mCallbacks = callbacks;
+    }
+
+    public void setCallbackListener(AlbumScanCallbackListener callbackListener) {
+        this.callbackListener = callbackListener;
     }
 
     @Override
@@ -33,6 +35,7 @@ public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
         if (context == null) {
             return null;
         }
+
         mLoadFinished = false;
         return AlbumCursorLoader.newInstance(context);
     }
@@ -45,8 +48,8 @@ public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
         }
         if (!mLoadFinished) {
             mLoadFinished = true;
-            if (mCallbacks != null) {
-                mCallbacks.onAlbumScanFinish(data);
+            if (callbackListener != null) {
+                callbackListener.onAlbumScanFinish(data);
             }
         }
     }
@@ -57,8 +60,8 @@ public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
         if (context == null) {
             return;
         }
-        if (mCallbacks != null) {
-            mCallbacks.onAlbumScanReset();
+        if (callbackListener != null) {
+            callbackListener.onAlbumScanReset();
         }
     }
 
@@ -69,7 +72,7 @@ public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
         if (mLoaderManager != null) {
             mLoaderManager.destroyLoader(LOADER_ID);
         }
-        mCallbacks = null;
+        callbackListener = null;
     }
 
     /**
@@ -90,8 +93,7 @@ public class AlbumScanner implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * 扫描回调
      */
-    public interface AlbumScanCallbacks {
-
+    public interface AlbumScanCallbackListener {
         void onAlbumScanFinish(Cursor cursor);
 
         void onAlbumScanReset();

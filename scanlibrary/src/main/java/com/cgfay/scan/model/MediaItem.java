@@ -12,7 +12,6 @@ import android.text.TextUtils;
  * 媒体item对象
  */
 public class MediaItem implements Parcelable {
-
     public static final Creator<MediaItem> CREATOR = new Creator<MediaItem>() {
         @Override
         public MediaItem createFromParcel(Parcel source) {
@@ -80,6 +79,7 @@ public class MediaItem implements Parcelable {
 
     /**
      * 获取uri
+     *
      * @return
      */
     public Uri getContentUri() {
@@ -88,6 +88,7 @@ public class MediaItem implements Parcelable {
 
     /**
      * 是否相机
+     *
      * @return
      */
     public boolean isCapture() {
@@ -96,6 +97,7 @@ public class MediaItem implements Parcelable {
 
     /**
      * 是否图片
+     *
      * @return
      */
     public boolean isImage() {
@@ -109,6 +111,7 @@ public class MediaItem implements Parcelable {
 
     /**
      * 是否视频
+     *
      * @return
      */
     public boolean isVideo() {
@@ -123,6 +126,7 @@ public class MediaItem implements Parcelable {
 
     /**
      * 是否gif
+     *
      * @return
      */
     public boolean isGif() {
@@ -140,9 +144,9 @@ public class MediaItem implements Parcelable {
         MediaItem item = (MediaItem) obj;
         return (id == item.id)
                 && ((mimeType != null && mimeType.equals(item.mimeType))
-                    || (mimeType == null && item.mimeType == null))
+                || (mimeType == null && item.mimeType == null))
                 && ((uri != null && uri.equals(item.uri))
-                    || (uri == null &&item.uri == null))
+                || (uri == null && item.uri == null))
                 && (size == item.size)
                 && (duration == item.duration);
     }

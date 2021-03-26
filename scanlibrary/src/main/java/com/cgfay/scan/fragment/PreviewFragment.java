@@ -14,18 +14,15 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.cgfay.scan.R;
-import com.cgfay.scan.model.MediaItem;
 import com.cgfay.scan.engine.MediaScanParam;
+import com.cgfay.scan.model.MediaItem;
 import com.cgfay.scan.utils.MediaMetadataUtils;
 
 public class PreviewFragment extends Fragment {
-
     private static final String CURRENT_MEDIA = "current_media";
-
     private ImageView mImageView;
     private ImageView mPlayView;
     private VideoView mVideoView;
-
 
     public static PreviewFragment newInstance(MediaItem item) {
         PreviewFragment fragment = new PreviewFragment();
@@ -44,14 +41,14 @@ public class PreviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         final MediaItem item = getArguments().getParcelable(CURRENT_MEDIA);
         if (item == null) {
             return;
         }
 
         mPlayView = view.findViewById(R.id.iv_play);
-        if (item.isImage()) { // 根据类型判断是图片还是视频
+        // 根据类型判断是图片还是视频
+        if (item.isImage()) {
             mImageView = (ImageView) view.findViewById(R.id.image_view);
             Point size = MediaMetadataUtils.getBitmapSize(item.getContentUri(), getActivity());
             if (item.isGif()) {
@@ -61,6 +58,7 @@ public class PreviewFragment extends Fragment {
                 MediaScanParam.getInstance().mediaLoader.loadImage(getContext(), size.x, size.y,
                         mImageView, item.getContentUri());
             }
+
             mImageView.setVisibility(View.VISIBLE);
             mPlayView.setVisibility(View.GONE);
         } else {
@@ -97,6 +95,7 @@ public class PreviewFragment extends Fragment {
 
     /**
      * 设置视频
+     *
      * @param uri
      */
     private void setupVideo(Uri uri) {

@@ -34,6 +34,8 @@
         android:id="@+id/iv_preview"
         android:layout_width="@dimen/album_item_preview_size"
         android:layout_height="@dimen/album_item_preview_size"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="3dp"
         android:layout_gravity="end|bottom"
         android:background="@drawable/ic_media_thumbnail_preview"/>
 

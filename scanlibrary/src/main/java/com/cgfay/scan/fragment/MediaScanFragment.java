@@ -2,8 +2,6 @@ package com.cgfay.scan.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,24 +12,21 @@ import android.widget.Toast;
 
 import com.cgfay.scan.R;
 import com.cgfay.scan.adapter.MediaScanAdapter;
+import com.cgfay.scan.engine.MediaScanParam;
 import com.cgfay.scan.model.AlbumItem;
 import com.cgfay.scan.model.MediaItem;
-import com.cgfay.scan.engine.MediaScanParam;
 import com.cgfay.scan.scanner.MediaScanner;
 import com.cgfay.scan.utils.SpanCountUtils;
 import com.cgfay.scan.widget.MediaItemDecoration;
 
-public class MediaScanFragment extends Fragment implements MediaScanner.MediaScanCallbacks,
+public class MediaScanFragment extends Fragment implements MediaScanner.MediaScanCallbackListener,
         MediaScanAdapter.OnCaptureClickListener, MediaScanAdapter.OnMediaItemSelectedListener {
-
     private static final String CURRENT_ALBUM = "current_album";
-
     private MediaScanner mMediaScanner;
     private RecyclerView mRecyclerView;
     private MediaScanAdapter mAdapter;
     private MediaScanAdapter.OnCaptureClickListener mCaptureClickListener;
     private MediaScanAdapter.OnMediaItemSelectedListener mMediaItemSelectedListener;
-
     // 出错提示
     private Toast mErrorTips;
 
@@ -43,20 +38,20 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
         return fragment;
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_media_scan, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.media_view);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AlbumItem albumItem = getArguments().getParcelable(CURRENT_ALBUM);
         mAdapter = new MediaScanAdapter(getContext(), mRecyclerView);
@@ -77,10 +72,11 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
         if (spacing <= 0) {
             spacing = getResources().getDimensionPixelSize(R.dimen.media_item_spacing);
         }
-        mRecyclerView.addItemDecoration(new MediaItemDecoration(spanCount, spacing, false));
 
+        mRecyclerView.addItemDecoration(new MediaItemDecoration(spanCount, spacing, false));
         mRecyclerView.setAdapter(mAdapter);
-        mMediaScanner = new MediaScanner(getActivity(), this);
+        mMediaScanner = new MediaScanner(getActivity());
+        mMediaScanner.setCallbackListener(this);
         mMediaScanner.scanAlbum(albumItem, MediaScanParam.getInstance().showCapture);
     }
 
@@ -92,6 +88,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
 
     /**
      * 更新相册
+     *
      * @param item
      */
     public void updateAlbum(AlbumItem item) {
@@ -102,6 +99,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
 
     /**
      * 混动到当前位置
+     *
      * @param position
      */
     public void scrollToPosition(int position) {
@@ -117,6 +115,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
 
     /**
      * 更新媒体数据
+     *
      * @param cursor
      */
     public void updateMediaData(Cursor cursor) {
@@ -124,10 +123,9 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
     }
 
 
-
     @Override
     public void onMediaScanFinish(Cursor cursor) {
-       updateMediaData(cursor);
+        updateMediaData(cursor);
     }
 
     @Override
@@ -152,6 +150,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
             mErrorTips.show();
             return;
         }
+
         if (mMediaItemSelectedListener != null) {
             mMediaItemSelectedListener.onMediaItemSelected((AlbumItem) getArguments().getParcelable(CURRENT_ALBUM), mediaItem, position);
         }
@@ -166,6 +165,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
 
     /**
      * 添加拍照item选中监听器
+     *
      * @param listener
      */
     public void addCaptureClickListener(MediaScanAdapter.OnCaptureClickListener listener) {
@@ -174,6 +174,7 @@ public class MediaScanFragment extends Fragment implements MediaScanner.MediaSca
 
     /**
      * 添加媒体item选中监听器
+     *
      * @param listener
      */
     public void addMediaItemClickListener(MediaScanAdapter.OnMediaItemSelectedListener listener) {

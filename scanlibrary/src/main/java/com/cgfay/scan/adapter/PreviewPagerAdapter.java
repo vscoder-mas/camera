@@ -14,7 +14,6 @@ import java.util.List;
  * 预览页面适配器
  */
 public class PreviewPagerAdapter extends FragmentPagerAdapter {
-
     private ArrayList<MediaItem> mMediaItems = new ArrayList<>();
 
     public PreviewPagerAdapter(FragmentManager fm) {
@@ -33,6 +32,7 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * 获取媒体对象
+     *
      * @param position
      * @return
      */
@@ -42,6 +42,7 @@ public class PreviewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * 添加媒体对象
+     *
      * @param items
      */
     public void addMediaItems(List<MediaItem> items) {

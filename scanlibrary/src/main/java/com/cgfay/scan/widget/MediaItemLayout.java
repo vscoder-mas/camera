@@ -11,14 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cgfay.scan.R;
-import com.cgfay.scan.model.MediaItem;
 import com.cgfay.scan.engine.MediaScanParam;
+import com.cgfay.scan.model.MediaItem;
 
 /**
  * 媒体item布局
  */
 public class MediaItemLayout extends SquareFrameLayout implements View.OnClickListener {
-
     private ImageView mThumbnail;
     private ImageView mVideoIndicator;
     private TextView mVideoDuration;
@@ -90,6 +89,7 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
 
     /**
      * 设置列表绑定信息
+     *
      * @param info
      */
     public void setItemBindInfo(ItemBindInfo info) {
@@ -98,6 +98,7 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
 
     /**
      * 设置媒体item
+     *
      * @param item
      */
     public void setMediaItem(MediaItem item) {
@@ -108,6 +109,7 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
 
     /**
      * 获取媒体item对象
+     *
      * @return
      */
     public MediaItem getMediaItem() {
@@ -117,6 +119,7 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
 
     /**
      * 添加item点击监听器
+     *
      * @param listener
      */
     public void addOnMediaItemClickListener(OnMediaItemClickListener listener) {
@@ -127,9 +130,7 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
      * 媒体item点击监听器
      */
     public interface OnMediaItemClickListener {
-
         void onMediaItemClicked(ImageView thumbnail, MediaItem item, RecyclerView.ViewHolder holder, boolean preview);
-
     }
 
     /**
@@ -143,7 +144,6 @@ public class MediaItemLayout extends SquareFrameLayout implements View.OnClickLi
         public ItemBindInfo(int resize, Drawable placeholder, RecyclerView.ViewHolder viewHolder) {
             mResize = resize;
             mPlaceholder = placeholder;
-
             mViewHolder = viewHolder;
         }
     }

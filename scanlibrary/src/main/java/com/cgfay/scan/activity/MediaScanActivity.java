@@ -32,24 +32,18 @@ import java.util.List;
 /**
  * 媒体扫描页面
  */
-public class MediaScanActivity extends AppCompatActivity implements AlbumScanner.AlbumScanCallbacks,
+public class MediaScanActivity extends AppCompatActivity implements AlbumScanner.AlbumScanCallbackListener,
         MediaScanAdapter.OnCaptureClickListener, MediaScanAdapter.OnMediaItemSelectedListener {
-
     private static final int CURRENT_MEDIA = 0x01;
-
     private AlbumScanner mAlbumScanner;
-
     private RelativeLayout mLayoutTitle;
     private TextView mAlbumTitle;
     private ImageView mAlbumArrow;
-
     private FrameLayout mLayoutContainer;
     private FrameLayout mLayoutEmptyPage;
-
     private FrameLayout mLayoutAlbumSelect;
     private ListView mListAlbums;
     private AlbumScanAdapter mAlbumScanAdapter;
-
     // 显示相册选择页面
     private boolean mShowAlbumSelected;
 
@@ -57,7 +51,8 @@ public class MediaScanActivity extends AppCompatActivity implements AlbumScanner
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_scan);
-        mAlbumScanner = new AlbumScanner(this, this);
+        mAlbumScanner = new AlbumScanner(this);
+        mAlbumScanner.setCallbackListener(this);
         mAlbumScanner.scanAlbums();
         initView();
     }
@@ -108,6 +103,7 @@ public class MediaScanActivity extends AppCompatActivity implements AlbumScanner
                 if (item.isAll() && MediaScanParam.getInstance().showCapture) {
                     item.addCaptureCount();
                 }
+
                 mAlbumTitle.setText(item.getDisplayName(MediaScanActivity.this));
                 onAlbumSelectedChanged(item);
             }
@@ -172,7 +168,6 @@ public class MediaScanActivity extends AppCompatActivity implements AlbumScanner
             showAlbumSelectPage(false);
             mLayoutContainer.setVisibility(View.VISIBLE);
             mLayoutEmptyPage.setVisibility(View.GONE);
-
             MediaScanParam.getInstance().mediaLoader = new GlideMediaLoader();
 
             // 判断是否已经存在Fragment，如果Fragment已存在则直接更新需要扫描的相册
@@ -201,15 +196,16 @@ public class MediaScanActivity extends AppCompatActivity implements AlbumScanner
     @Override
     public void onMediaItemSelected(AlbumItem albumItem, MediaItem mediaItem, int position) {
         if (MediaScanParam.getInstance().mediaSelectedListener != null) {
-
-            List<Uri> uriList = new ArrayList<Uri>();
+            //content://media/external/images/media/28501
+            List<Uri> uriList = new ArrayList<>();
             uriList.add(mediaItem.getContentUri());
-
+            ///storage/emulated/0/DCIM/Camera/IMG_20210318_095956.jpg
             List<String> pathList = new ArrayList<>();
             pathList.add(FileUtils.getUriPath(this, mediaItem.getContentUri()));
             boolean isVideo = mediaItem.isVideo();
             MediaScanParam.getInstance().mediaSelectedListener.onSelected(uriList, pathList, isVideo);
         }
+
         finish();
     }
 
