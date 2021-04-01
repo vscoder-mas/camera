@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +32,7 @@ import java.nio.ByteBuffer;
  * 滤镜编辑页面
  */
 public class ImageFilterFragment extends Fragment implements View.OnClickListener {
-
     private View mContentView;
-
     private Button mBtnInternal;
     private Button mBtnCustomize;
     private Button mBtnCollection;
@@ -48,10 +44,8 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
     private GLImageSurfaceView mCainImageView;
     private RecyclerView mFiltersView;
     private LinearLayoutManager mLayoutManager;
-
     private Activity mActivity;
     private Handler mMainHandler;
-
     private Bitmap mBitmap;
 
     @Override
@@ -62,30 +56,31 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContentView = inflater.inflate(R.layout.fragment_image_filter, container, false);
         return mContentView;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView(mContentView);
     }
 
     /**
      * 初始化视图
+     *
      * @param view
      */
     private void initView(View view) {
@@ -94,6 +89,7 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
         if (mBitmap != null) {
             mCainImageView.setBitmap(mBitmap);
         }
+
         // 滤镜内容框
         mLayoutFilterContent = (FrameLayout) view.findViewById(R.id.layout_filter_content);
         mBtnInternal = (Button) view.findViewById(R.id.btn_internal);
@@ -200,6 +196,7 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
 
     /**
      * 设置bitmap
+     *
      * @param bitmap
      */
     public void setBitmap(Bitmap bitmap) {
@@ -211,6 +208,7 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
 
     /**
      * 是否显示GLSurfaceView，解决多重fragment时显示问题
+     *
      * @param showing
      */
     public void showGLSurfaceView(boolean showing) {
@@ -238,6 +236,7 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
 
     /**
      * 获取图片缓存绝对路径
+     *
      * @param context
      * @return
      */
@@ -245,7 +244,7 @@ public class ImageFilterFragment extends Fragment implements View.OnClickListene
         String directoryPath;
         // 判断外部存储是否可用，如果不可用则使用内部存储路径
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            directoryPath =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+            directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
         } else { // 使用内部存储缓存目录
             directoryPath = context.getCacheDir().getAbsolutePath();
         }

@@ -4,7 +4,6 @@ package com.cgfay.filterlibrary.glfilter.resource.bean;
  * 资源数据
  */
 public class ResourceData {
-
     public String name;         // 名称
     public String zipPath;      // 压缩包路径，绝对路径，"assets://" 或 "file://"开头
     public ResourceType type;   // 资源类型
